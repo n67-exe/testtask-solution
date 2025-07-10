@@ -4,7 +4,7 @@ The script can be found in [solution.py](solution.py).
 
 Script uses `argparse` for better flexibility and control. The following options are available:
 ```
-usage: solution.py [-h] [--input INPUT] [--output OUTPUT] [--noprint]
+usage: solution.py [-h] [--input INPUT] [--output OUTPUT] [--noprint] [--single-pass]
   -h, --help           show this help message and exit
   --input, -i INPUT    Input CSV file path (default: calls.csv)
   --output, -o OUTPUT  Output statistic file path (default: no file output)
