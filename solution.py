@@ -179,10 +179,9 @@ def daily_from_intermediate(individual_performance, campaign_performance, all_ag
 
     target_position: int = math.floor(len(all_agents) * 0.2)
 
-    statistic.underperforming_count_agents = separate_list_by_position(agents_sorted_by_count_performance,
-                                                                       target_position)
-    statistic.underperforming_amount_agents = separate_list_by_position(agents_sorted_by_amount_performance,
-                                                                        target_position)
+    statistic.underperforming_count_agents = separate_list_by_position(agents_sorted_by_count_performance, target_position)
+    statistic.underperforming_amount_agents = separate_list_by_position(agents_sorted_by_amount_performance, target_position)
+
     return statistic
 
 
