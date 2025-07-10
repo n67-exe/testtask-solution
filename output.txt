@@ -183,8 +183,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0008
 	agent0433
 	agent0144
-	agent0544
 	agent0231
+	agent0544
 	agent0355
 	agent0078
 	agent0012
@@ -221,11 +221,11 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0697
 	agent0147
 	agent0714
-	agent0724
 	agent0301
+	agent0724
 	agent0859
-	agent0672
 	agent0586
+	agent0672
 	agent0137
 	agent0380
 	agent0831
@@ -456,8 +456,8 @@ Underperforming agents by amount sold per hour (worst to best):
 	agent0144
 	agent0957
 	agent0091
-	agent0975
 	agent0724
+	agent0975
 
 ==================================================
 
@@ -665,8 +665,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0348
 	agent0912
 	agent0880
-	agent0792
 	agent0081
+	agent0792
 	agent0043
 	agent0491
 	agent0815
@@ -675,8 +675,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0327
 	agent0099
 	agent0461
-	agent0784
 	agent0741
+	agent0784
 	agent0527
 	agent0708
 	agent0537
@@ -700,15 +700,15 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0090
 	agent0642
 	agent0647
-	agent0684
 	agent0318
+	agent0684
 	agent0883
 	agent0077
 	agent0578
 	agent0227
 	agent0463
-	agent0945
 	agent0402
+	agent0945
 	agent0032
 	agent0822
 	agent0937
@@ -717,8 +717,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0811
 	agent0908
 	agent0320
-	agent0442
 	agent0322
+	agent0442
 
 Underperforming agents by amount sold per hour (worst to best):
 	agent0104
@@ -1020,12 +1020,12 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0445
 	agent0635
 	agent0832
-	agent0713
 	agent0616
+	agent0713
 	agent0065
 	agent0657
-	agent0500
 	agent0219
+	agent0500
 	agent0287
 	agent0943
 	agent0780
@@ -1074,16 +1074,16 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0180
 	agent0950
 	agent0698
-	agent0805
 	agent0706
+	agent0805
 	agent0142
 	agent0681
 	agent0106
 	agent0778
 	agent0880
 	agent0565
-	agent0538
 	agent0055
+	agent0538
 	agent0680
 	agent0333
 	agent0630
@@ -1102,8 +1102,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0792
 	agent0230
 	agent0026
-	agent0202
 	agent0057
+	agent0202
 	agent0143
 	agent0463
 	agent0517
@@ -1461,8 +1461,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0909
 	agent0823
 	agent0793
-	agent0661
 	agent0256
+	agent0661
 	agent0593
 	agent0258
 	agent0009
@@ -1561,8 +1561,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0654
 	agent0935
 	agent0891
-	agent0846
 	agent0402
+	agent0846
 	agent0942
 	agent0507
 	agent0041
@@ -1581,8 +1581,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0680
 	agent0390
 	agent0100
-	agent0389
 	agent0239
+	agent0389
 	agent0915
 	agent0223
 	agent0681
@@ -1591,20 +1591,20 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0912
 	agent0476
 	agent0107
-	agent0332
 	agent0071
+	agent0332
 	agent0821
 	agent0347
-	agent0677
 	agent0187
+	agent0677
 	agent0568
 	agent0244
 	agent0311
 	agent0794
 	agent0531
 	agent0443
-	agent0964
 	agent0866
+	agent0964
 	agent0588
 	agent0121
 	agent0868
@@ -1617,8 +1617,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0199
 	agent0250
 	agent0086
-	agent0433
 	agent0161
+	agent0433
 	agent0344
 	agent0599
 	agent0784
@@ -1928,8 +1928,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0295
 	agent0114
 	agent0539
-	agent0511
 	agent0326
+	agent0511
 	agent0929
 	agent0082
 	agent0667
@@ -1977,8 +1977,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0966
 	agent0741
 	agent0916
-	agent0917
 	agent0049
+	agent0917
 	agent0988
 	agent0605
 	agent0062
@@ -2023,9 +2023,9 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0436
 	agent0060
 	agent0522
-	agent0299
 	agent0078
 	agent0287
+	agent0299
 	agent0776
 	agent0363
 	agent0691
@@ -2066,15 +2066,15 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0636
 	agent0004
 	agent0646
-	agent0795
 	agent0465
+	agent0795
 	agent0206
 	agent0126
 	agent0159
 	agent0998
 	agent0143
-	agent0851
 	agent0169
+	agent0851
 	agent0932
 	agent0753
 	agent0225
@@ -2090,8 +2090,8 @@ Underperforming agents by number of sales per hour (worst to best):
 	agent0602
 	agent0202
 	agent0286
-	agent0881
 	agent0870
+	agent0881
 	agent0139
 	agent0243
 	agent0453
