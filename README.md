@@ -9,6 +9,7 @@ usage: solution.py [-h] [--input INPUT] [--output OUTPUT] [--noprint]
   --input, -i INPUT    Input CSV file path (default: calls.csv)
   --output, -o OUTPUT  Output statistic file path (default: no file output)
   --noprint            Disable console output printing (default: print to console)
+  --single-pass        Compute every statistic in a single pass, increases RAM utilization, improves performance (default: compute statistics sequentially)
 ```
 
 An example of the output produced by the script can be found in [output.txt](output.txt).
@@ -45,7 +46,7 @@ Underperforming agents by number of sales per hour (worst to best):
 Underperforming agents by amount sold per hour (worst to best):
 	agent0845
 	...
-	agent0724
+	agent0975
 
 ==================================================
 
@@ -87,4 +88,4 @@ Underperforming agents by amount sold per hour (worst to best):
 ==================================================
 ```
 
-Script seems to use under 40MB of RAM and runs in under 10s on my machine.
+Script seems to use under 15MB of RAM and runs in under 10s (under 2s with `--single-pass`) on my machine with 1'000'000 lines CSV file.
