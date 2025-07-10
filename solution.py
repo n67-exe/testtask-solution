@@ -92,31 +92,7 @@ def get_field_set_from_file(file, field: str) -> set[str]:
 
     return field_set
 
-def process_date(file, date: datetime.date) -> DailyStatistic:
-    dict_reader = csv.DictReader(file)
-
-    type agents_performance_dict = defaultdict[str, AgentPerformance]
-
-    def get_agent_performance_dict() -> agents_performance_dict:
-        return defaultdict(AgentPerformance)
-
-    all_agents = set[str]()
-    individual_performance = get_agent_performance_dict()
-    campaign_performance = defaultdict[str, agents_performance_dict](get_agent_performance_dict)
-
-    for row in dict_reader:
-        all_agents.add(row["AGENT"])
-
-        dt = datetime.datetime.fromisoformat(row["CALLTIME"])
-
-        if dt.date() == date:
-            success: bool = row["STATUS"] in ["SALE", "CCSALE", "CREDIT"]
-            amount: float = float(row["AMOUNT"]) if row["AMOUNT"] else 0
-            time = dt.time()
-
-            individual_performance[row["AGENT"]].add_entry(time, success, amount)
-            campaign_performance[row["CAMPAIGN"]][row["AGENT"]].add_entry(time, success, amount)
-
+def daily_from_intermediate(individual_performance, campaign_performance, all_agents: set[str]) -> DailyStatistic:
     statistic = DailyStatistic()
 
     for campaign, agents_performance in campaign_performance.items():
@@ -156,7 +132,7 @@ def process_date(file, date: datetime.date) -> DailyStatistic:
             if average_performance.success_amount_per_hour == best_performance.success_amount_per_hour:
                 campaign_statistic.best_amount_agents.append(agent)
 
-    type agents_statistic_list = list[tuple[str, float]]
+    type agents_statistic_list = list[tuple[float, str]]
 
     agents_sorted_by_count_performance: agents_statistic_list = []
     agents_sorted_by_amount_performance: agents_statistic_list = []
@@ -166,11 +142,11 @@ def process_date(file, date: datetime.date) -> DailyStatistic:
 
         hours: float = performance.work_hours()
 
-        agents_sorted_by_count_performance.append((agent, performance.success_count / hours))
-        agents_sorted_by_amount_performance.append((agent, performance.success_amount / hours))
+        agents_sorted_by_count_performance.append((performance.success_count / hours, agent))
+        agents_sorted_by_amount_performance.append((performance.success_amount / hours, agent))
 
-    agents_sorted_by_count_performance.sort(key=lambda t: t[1])
-    agents_sorted_by_amount_performance.sort(key=lambda t: t[1])
+    agents_sorted_by_count_performance.sort()
+    agents_sorted_by_amount_performance.sort()
 
     def separate_list_by_position(agent_list: agents_statistic_list, position: int) -> ThresholdAgentsList:
         output_list = ThresholdAgentsList()
@@ -180,14 +156,14 @@ def process_date(file, date: datetime.date) -> DailyStatistic:
             return output_list
 
         if position == end_position:
-            output_list.definite = [s for s, _ in agent_list]
+            output_list.definite = [s for _, s in agent_list]
             return output_list
 
         lower_bound: int = position - 1
         upper_bound: int = position
 
         if agent_list[lower_bound][1] != agent_list[upper_bound][1]:
-            output_list.definite = [s for s, _ in agent_list[:upper_bound]]
+            output_list.definite = [s for _, s in agent_list[:upper_bound]]
             return output_list
 
         while lower_bound > 0 and agent_list[lower_bound][1] == agent_list[lower_bound - 1][1]:
@@ -196,17 +172,88 @@ def process_date(file, date: datetime.date) -> DailyStatistic:
         while upper_bound < end_position and agent_list[upper_bound - 1][1] == agent_list[upper_bound][1]:
             upper_bound += 1
 
-        output_list.definite = [s for s, _ in agent_list[:lower_bound]]
-        output_list.potential = [s for s, _ in agent_list[lower_bound:upper_bound]]
+        output_list.definite = [s for _, s in agent_list[:lower_bound]]
+        output_list.potential = [s for _, s in agent_list[lower_bound:upper_bound]]
 
         return output_list
 
     target_position: int = math.floor(len(all_agents) * 0.2)
 
-    statistic.underperforming_count_agents = separate_list_by_position(agents_sorted_by_count_performance, target_position)
-    statistic.underperforming_amount_agents = separate_list_by_position(agents_sorted_by_amount_performance, target_position)
-
+    statistic.underperforming_count_agents = separate_list_by_position(agents_sorted_by_count_performance,
+                                                                       target_position)
+    statistic.underperforming_amount_agents = separate_list_by_position(agents_sorted_by_amount_performance,
+                                                                        target_position)
     return statistic
+
+
+def process_date(file, date: datetime.date) -> DailyStatistic:
+    dict_reader = csv.DictReader(file)
+
+    type agents_performance_dict = defaultdict[str, AgentPerformance]
+
+    def get_agent_performance_dict() -> agents_performance_dict:
+        return defaultdict(AgentPerformance)
+
+    all_agents = set[str]()
+    individual_performance = get_agent_performance_dict()
+    campaign_performance = defaultdict[str, agents_performance_dict](get_agent_performance_dict)
+
+    for row in dict_reader:
+        all_agents.add(row["AGENT"])
+
+        dt = datetime.datetime.fromisoformat(row["CALLTIME"])
+
+        if dt.date() == date:
+            success: bool = row["STATUS"] in ["SALE", "CCSALE", "CREDIT"]
+            amount: float = float(row["AMOUNT"]) if row["AMOUNT"] else 0
+            time = dt.time()
+
+            individual_performance[row["AGENT"]].add_entry(time, success, amount)
+            campaign_performance[row["CAMPAIGN"]][row["AGENT"]].add_entry(time, success, amount)
+
+    return daily_from_intermediate(individual_performance, campaign_performance, all_agents)
+
+
+def process_all(file) -> dict[datetime.date, DailyStatistic]:
+    dict_reader = csv.DictReader(file)
+
+    type agents_performance_dict = defaultdict[str, AgentPerformance]
+
+    def get_agent_performance_dict() -> agents_performance_dict:
+        return defaultdict(AgentPerformance)
+
+    type campaign_agents_performance_dict = defaultdict[str, agents_performance_dict]
+
+    def get_campaign_agent_performance_dict() -> campaign_agents_performance_dict:
+        return defaultdict(get_agent_performance_dict)
+
+    all_agents = set[str]()
+    all_dates = set[datetime.date]()
+    individual_performance_dict = defaultdict[datetime.date, agents_performance_dict](get_agent_performance_dict)
+    campaign_performance_dict = defaultdict[datetime.date, campaign_agents_performance_dict](get_campaign_agent_performance_dict)
+
+    for row in dict_reader:
+        all_agents.add(row["AGENT"])
+
+        dt = datetime.datetime.fromisoformat(row["CALLTIME"])
+
+        success: bool = row["STATUS"] in ["SALE", "CCSALE", "CREDIT"]
+        amount: float = float(row["AMOUNT"]) if row["AMOUNT"] else 0
+        date = dt.date()
+        time = dt.time()
+
+        all_dates.add(date)
+
+        individual_performance_dict[date][row["AGENT"]].add_entry(time, success, amount)
+        campaign_performance_dict[date][row["CAMPAIGN"]][row["AGENT"]].add_entry(time, success, amount)
+
+    statistic_dict = dict[datetime.date, DailyStatistic]()
+
+    for date in all_dates:
+        statistic_dict[date] = daily_from_intermediate(individual_performance_dict[date], campaign_performance_dict[date], all_agents)
+
+    return statistic_dict
+
 
 def display_daily_statistic(file, statistic: DailyStatistic):
     for campaign in sorted(statistic.campaign_statistics.keys()):
@@ -302,29 +349,52 @@ def display_daily_statistic(file, statistic: DailyStatistic):
         file.write(f"\n")
 
 
+def display_dated_statistic(file, statistic: DailyStatistic, date: datetime.date):
+    file.write(f"PERFORMANCE REPORT - {date}\n")
+    file.write('=' * 50)
+    file.write(f"\n\n")
+
+    display_daily_statistic(file, statistic)
+
+    file.write('=' * 50)
+    file.write(f"\n\n")
+
+
 def display_all_statistic(file, statistics: dict[datetime.date, DailyStatistic]):
     for date in sorted(statistics.keys()):
         statistic = statistics[date]
 
-        file.write(f"PERFORMANCE REPORT - {date}\n")
-        file.write('=' * 50)
-        file.write(f"\n\n")
-
-        display_daily_statistic(file, statistic)
-
-        file.write('=' * 50)
-        file.write(f"\n\n")
+        display_dated_statistic(file, statistic, date)
 
 
 def main(input_filepath: str, output_filepath: str | None, print_to_console: bool):
     with open(input_filepath, 'r') as file:
         dates = get_dates_from_file(file)
-        statistics: dict[datetime.date, DailyStatistic] = {}
 
-        for date in dates:
-            file.seek(0)
+        if output_filepath is not None:
+            with open(output_filepath, 'w') as output:
+                for date in sorted(dates):
+                    file.seek(0)
 
-            statistics[date] = process_date(file, date)
+                    statistic = process_date(file, date)
+
+                    display_dated_statistic(output, statistic, date)
+
+                    if print_to_console:
+                        display_dated_statistic(sys.stdout, statistic, date)
+        else:
+            for date in sorted(dates):
+                file.seek(0)
+
+                statistic = process_date(file, date)
+
+                if print_to_console:
+                    display_dated_statistic(sys.stdout, statistic, date)
+
+
+def single_pass_main(input_filepath: str, output_filepath: str | None, print_to_console: bool):
+    with open(input_filepath, 'r') as file:
+        statistics = process_all(file)
 
     if output_filepath is not None:
         with open(output_filepath, 'w') as file:
@@ -342,7 +412,9 @@ if __name__ == '__main__':
                         help='Output statistic file path (default: no file output)')
     parser.add_argument('--noprint', action='store_true',
                         help='Disable console output printing (default: print to console)')
+    parser.add_argument('--single-pass', dest="single_pass", action='store_true',
+                        help='Compute every statistic in a single pass, increases RAM utilization, improves performance (default: compute statistics sequentially)')
 
     args = parser.parse_args()
 
-    main(args.input, args.output, not args.noprint)
+    (single_pass_main if args.single_pass else main)(args.input, args.output, not args.noprint)
