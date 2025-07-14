@@ -87,5 +87,15 @@ Underperforming agents by amount sold per hour (worst to best):
 
 ==================================================
 ```
+For every date present in the input file (in chronological order) the following performance report is generated:
+- For each campaign present in all the requests for the date (ordered alphabetically by name) the following statistics are reported:
+  - Average campaign performance (for both *number of sales per hour* and *amount sold per hour*, to 3 decimal places)
+  - List of agents that achieved the highest performance (for both *number of sales per hour* and *amount sold per hour*, ordered alphabetically by name)
+- List of underperforming agents that end up in the bottom 20% anyway (for both *number of sales per hour* and *amount sold per hour*, reported only if not empty, ordered from lowest to highest by performance, then alphabetically by name)
+- List of potentially underperforming agents with the same performance that may or may not end up in the bottom 20% depending on the relative ordering among them (for both *number of sales per hour* and *amount sold per hour*, reported if not empty, ordered alphabetically by name)
 
-Script seems to use under 15MB of RAM and runs in under 10s (under 2s with `--single-pass`) on my machine with 1'000'000 lines CSV file.
+The script can be easily modified to output the data in a different format.
+
+---
+
+The script (along with an interpreter) seems to use under 15MB of RAM and runs in under 10s (under 2s with `--single-pass`) on my machine with 1'000'000 lines CSV file.
